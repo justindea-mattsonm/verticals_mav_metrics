@@ -28,6 +28,12 @@ function fmtDate(d: Date | string | null): string {
   return date.toISOString().replace("T", " ").slice(0, 16) + "Z";
 }
 
+function fmtDay(d: Date | string | null | undefined): string {
+  if (!d) return "—";
+  const date = typeof d === "string" ? new Date(d) : d;
+  return date.toISOString().slice(0, 10);
+}
+
 function FreshnessTable({ rows }: { rows: TableFreshness[] }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white overflow-hidden">
@@ -138,7 +144,7 @@ function TrailingMetricsSection({ rows }: { rows: RollupMetricsTrailing14dRow[] 
             <tr key={`${r.world_type}-${r.rollup_stage}-${i}`}>
               <td className="px-3 py-2">{r.world_type}</td>
               <td className="px-3 py-2">{r.rollup_stage}</td>
-              <td className="px-3 py-2 text-slate-600">{r.day_anchor}</td>
+              <td className="px-3 py-2 text-slate-600">{fmtDay(r.day_anchor)}</td>
               <td className="px-3 py-2 text-right tabular-nums">{fmtNum(r.aht_active_hours_7d)}</td>
               <td className="px-3 py-2 text-right tabular-nums">{fmtNum(r.wall_hours_7d)}</td>
               <td className="px-3 py-2 text-right tabular-nums">{fmtNum(r.throughput_per_day_7d)}</td>
@@ -193,7 +199,7 @@ function StaffingSection({ rows }: { rows: StaffingUserRollupRow[] | null }) {
                     .filter(Boolean)
                     .join(", ") || "—"}
                 </td>
-                <td className="px-3 py-2 text-slate-600">{r.last_worked_day ?? "—"}</td>
+                <td className="px-3 py-2 text-slate-600">{fmtDay(r.last_worked_day)}</td>
               </tr>
             ))}
           </tbody>
